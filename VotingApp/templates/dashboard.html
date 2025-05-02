@@ -1,0 +1,241 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | VotingComm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            min-height: 100vh;
+            padding: 30px;
+            color: #2c3e50;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .candidates-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .candidate-card {
+            background: #f9f9f9;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 280px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .candidate-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .candidate-card-content {
+            padding: 20px;
+        }
+
+        .candidate-card h3 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .candidate-card p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .btn-vote {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-vote:hover {
+            background: #2980b9;
+        }
+
+        .btn-voted {
+            background: gray;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: not-allowed;
+        }
+
+        .comment-section {
+            margin-top: 50px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            font-size: 16px;
+            resize: none;
+            height: 100px;
+            margin-bottom: 15px;
+        }
+
+        .comment-form button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .comment-form button:hover {
+            background: #2980b9;
+        }
+
+        .comment-list {
+            margin-top: 30px;
+        }
+
+        .comment-item {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .comment-item strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .vote-buttons {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .vote-buttons button {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #3498db;
+            transition: transform 0.3s;
+        }
+
+        .vote-buttons button:hover {
+            transform: scale(1.2);
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+{% if messages %}
+    {% for message in messages %}
+        <script>alert("{{ message }}");</script>
+    {% endfor %}
+{% endif %}
+
+<div class="container">
+
+    <h2>Welcome, {{ user.username }}</h2>
+
+    <!-- Candidates -->
+    <div class="candidates-list">
+        {% for candidate in candidates %}
+        <div class="candidate-card">
+            {% if candidate.image %}
+                <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}">
+            {% else %}
+                <div style="background: #eee; height: 200px; display: flex; align-items: center; justify-content: center;">No Image</div>
+            {% endif %}
+            <div class="candidate-card-content">
+                <h3>{{ candidate.name }}</h3>
+                <p>{{ candidate.description }}</p>
+                {% if not user_profile.voted %}
+                    <a href="{% url 'vote' candidate.id %}" class="btn-vote">Vote</a>
+                {% else %}
+                    <button class="btn-voted" disabled>Voted</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comment-section">
+        <h3>Leave a Comment</h3>
+
+        <form method="POST" class="comment-form">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit">Submit Comment</button>
+        </form>
+
+        <h3 style="margin-top: 40px;">Election Comments:</h3>
+
+        <div class="comment-list">
+            {% for comment in comments %}
+            <div class="comment-item">
+                <strong>{{ comment.user.username }}</strong> ({{ comment.created_at|date:"M d, Y H:i" }})
+                <p>{{ comment.text }}</p>
+
+                <!-- Upvote/Downvote buttons -->
+                <div class="vote-buttons">
+                    <button title="Upvote">👍</button>
+                    <button title="Downvote">👎</button>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

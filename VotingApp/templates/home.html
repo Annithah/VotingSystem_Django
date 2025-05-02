@@ -1,0 +1,226 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voting Community</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #f4f4f4;
+    }
+
+    header.welcome-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url("{% static 'VotingApp/votes.jpeg' %}") no-repeat center center/cover;
+      min-height: 100vh;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 80px;
+      height: 80px;
+      background-color: white;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      top: 40px;
+    }
+
+    nav {
+      background: rgba(255, 255, 255, 0.95);
+      margin: 10px auto;
+      width: 80%;
+      padding: 20px;
+      border-radius: 50px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      position: sticky;
+      top: 10px;
+      z-index: 99;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #3498db;
+      transform: scale(1.1);
+    }
+
+    .welcome h1 {
+      font-size: 60px;
+      margin-bottom: 20px;
+      color: #fff;
+      font-weight: bold;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    .welcome p {
+      font-size: 24px;
+      color: #eee;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    section {
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .about-section {
+      background-color: #ffffff;
+    }
+
+    .contact-section {
+      background-color: #ecf0f1;
+    }
+
+    section h2 {
+      font-size: 40px;
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    section p {
+      font-size: 20px;
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .register-section {
+      background: #3498db;
+      color: white;
+    }
+
+    .register-section a {
+      background-color: white;
+      color: #3498db;
+      padding: 12px 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 20px;
+      display: inline-block;
+      margin-top: 30px;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .register-section a:hover {
+      background-color: #2980b9;
+      color: white;
+    }
+
+    footer {
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Logo -->
+  <div class="logo">
+    <img src="{% static 'VotingApp/logo.jpeg' %}" alt="Logo">
+  </div>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="#welcome">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#register">Register</a>
+  </nav>
+
+  <!-- Welcome Section -->
+  <header id="welcome" class="welcome-header">
+    <div class="welcome">
+      <h1>Voting Community</h1>
+      <p>Your voice, your future! Join us and make it count.</p>
+    </div>
+  </header>
+
+  <!-- About Us Section -->
+  <section id="about" class="about-section">
+    <h2>About Us</h2>
+    <p>
+      VotingComm is a community-driven platform that empowers individuals to actively participate in leadership selection through free, fair, and transparent elections. 
+      Our mission is to amplify your voice and ensure everyone's opinion is counted with integrity and trust.
+    </p>
+  </section>
+
+  <!-- Contact Us Section -->
+  <section id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <p>
+      📧 Email: support@votingcomm.com<br>
+      📞 Phone: +250-795-130-378<br>
+      🏢 Address: VotingComm HQ, Future Street, Innovation City
+    </p>
+  </section>
+
+  <!-- Registration Section -->
+  <section class="register-section" id="register">
+    <h2>Get Started</h2>
+    <p>Ready to make your voice heard? Register and participate in shaping the future!</p>
+    <a href="{% url 'register' %}">Register Now</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 VotingComm. All rights reserved.
+  </footer>
+
+</body>
+</html>
