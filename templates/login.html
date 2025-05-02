@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - CodeNest</title>
+</head>
+<style>
+    *{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'poppins',sans-serif;
+    }
+    body{
+        background-color: #f9f9f9;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    h1{
+        color: #09d6a3;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    form{
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        width: 400px;
+        height: 500px;
+    }
+    input[type="text"], input[type="email"], input[type="password"]{
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+    }
+    button{
+        width: 100%;
+        background-color: #09d6a3;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 78px;
+        color: white;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    button:hover{
+        background-color: #07b89a;
+    }
+   .account{
+        margin-top: 0px;
+        text-align: center;
+    }
+    p{
+        margin-top: 2px;
+    }
+    a{
+        text-decoration: none;
+        color: #09d6a3;
+    }
+    a:hover{
+        text-decoration: underline;
+    }
+    
+</style>
+
+<body>
+   
+    <form method="post">
+        <h1>Login</h1>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+    
+</body>
+</html>

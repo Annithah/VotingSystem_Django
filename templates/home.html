@@ -1,0 +1,169 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Twitter - Home</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'poppins', sans-serif;
+        }
+        body {
+            background-color: #f9f9f9;
+           
+        }
+        header {
+            background-color: #09d6a3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        header.title{
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1000px;
+            
+        }
+        header .tagline {
+            font-size: 1rem;
+            color: #f1f1f1;
+            margin-top: 5px;
+        }
+        nav {
+            text-align: center;
+            margin-top: 10px;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #09d6a3;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: none;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #09d6a3;
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #07c595;
+        }
+        .post {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .timestamp {
+            font-size: 0.8rem;
+            color: gray;
+            text-align: right;
+        }
+        .actions {
+            margin-top: 10px;
+            text-align: right;
+        }
+        .actions form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="{% static 'images/twiter.jpg' %}" alt="My Photo">
+
+    <div class="title">Mini Twitter</div>
+    <div class="tagline">A simple social media platform</div> 
+</header>
+
+<nav>
+    {% if user.is_authenticated %}
+        Hello, {{ user.username }} |
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'signup' %}">Sign Up</a> | 
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</nav>
+
+<div class="container">
+    {% if user.is_authenticated %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.content }}
+            <button type="submit">Post</button>
+        </form>
+    {% else %}
+        <p> Post Something Here!</p>
+    {% endif %}
+
+    <h2>Recent Posts</h2>
+    {% for post in posts %}
+        <div class="post">
+            <p><strong>{{ post.user.username|default:"Anonymous" }}</strong>: {{ post.content }}</p>
+            <div class="timestamp">{{ post.created_at|date:"M d, Y H:i" }}</div>
+            <div class="actions">
+                <form method="post" action="{% url 'like_post' post.id %}">
+                    {% csrf_token %}
+                    <button type="submit"> {{ post.likes }}</button>
+                </form>
+
+                {% if user == post.user %}
+                    <form method="post" action="{% url 'delete_post' post.id %}">
+                        {% csrf_token %}
+                        <button type="submit"> Delete</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p>No posts yet.</p>
+    {% endfor %}
+</div>
+<footer>
+    <div style="text-align: center; padding: 20px; background-color: #09d6a3; color: white; position: fixed; width: 100%; bottom: 0;">
+        &copy; 2025 Mini Twitter. All rights reserved.
+    </div>
+</footer>
+</body>
+</html>
