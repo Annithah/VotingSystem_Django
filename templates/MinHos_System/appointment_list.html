@@ -1,0 +1,18 @@
+<!-- templates/your_app_name/appointment_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments List</title>
+</head>
+<body>
+    <h1>Appointments List</h1>
+    <ul>
+        {% for appointment in appointments %}
+            <li>Appointment for {{ appointment.patient.name }} with Dr. {{ appointment.doctor.name }} on {{ appointment.appointment_date }}. Status: {{ appointment.status }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+<!-- This template displays a list of appointments. Each appointment shows the patient's name, doctor's name, appointment date, and status. -->

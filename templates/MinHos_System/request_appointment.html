@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Appointment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+            /* display: flex; */
+            /* align-items: center;
+            justify-content: center;
+            text-align: center; */
+        }
+        .navbar {
+            background-color:white;
+            color: #09d6a3;
+            padding: 15px 30px;
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            height: 38px;
+            /* padding: 15px ;
+            /* margin-top: 2px; */
+            /* display: flex;
+            justify-content: space-between;
+            align-items: center;  */
+        }
+
+        .nav-brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: #09d6a3;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+                      color: seagreen;
+        }
+
+        .container {
+            width: 80%;
+             margin: auto; 
+            padding: 20px;
+            right: 100px; 
+          
+        }
+
+        /* header {
+            background-color: #2c3e50;
+            color: white;
+            padding:  0px;
+            text-align: center;
+            height: 66px;
+            font-size: 14px;
+           
+        } */
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 0;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            height: auto;
+            margin-left: 400px;
+            /* display: grid;
+            justify-content: center;
+            align-items: center;
+            text-align: center; */
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #09d6a3;;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #09d6a3;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #09d6a3;;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #09d6a3;;
+        }
+
+        .message {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #09d6a3;
+        }
+
+        footer {
+            background-color: #09d6a3;
+            color: white;
+            text-align: center;
+            padding: 9px 0;
+            /* margin-top: 40px; */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">MEDIHUB</div>
+        <div class="nav-links">
+            <a href="#appointment">Request Appointment</a>
+            <a href="#home.html">Home</a>
+
+    </nav>
+
+    <div class="form-container">
+        <h2>Request an Appointment</h2>
+        <p class="message">{{ message }}</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.patient.label_tag }}{{ form.patient }}
+            </div>
+            <div class="form-group">
+                {{ form.doctor.label_tag }}{{ form.doctor }}
+            </div>
+            <div class="form-group">
+                {{ form.date.label_tag }}{{ form.date }}
+            </div>
+            <div class="form-group">
+                {{ form.time.label_tag }}{{ form.time }}
+            </div>
+            <div class="form-group">
+                {{ form.reason.label_tag }}{{ form.reason }}
+            </div>
+            <div class="form-group">
+                {{ form.appointment_date.label_tag }}{{ form.appointment_date }}
+            </div>
+            <div class="form-group">
+                {{ form.status.label_tag }}{{ form.status }}
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit Request">
+            </div>
+        </form>
+            
+    </div>
+
+
+<footer>
+    <p>&copy; 2025 Your Company Name. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

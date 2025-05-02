@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Hospital System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: white;
+            color: #09d6a3;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-brand {
+            font-size: 28px;
+            font-weight: bold;
+            color: #09d6a3;
+        }
+
+        .nav-links a {
+            color: #09d6a3;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: seagreen;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: #09d6a3;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background-color: #074d47bb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: seagreen;
+        }
+
+        section {
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #09d6a3;
+            margin-bottom: 30px;
+        }
+
+        .about, .services, .contact {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .services-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .service-card {
+            background-color: #f4f6f9;
+            border-radius: 10px;
+            padding: 20px;
+            width: 280px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        footer {
+            background-color: #09d6a3;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="nav-brand">MEDIHUB</div>
+    <div class="nav-links">
+        <a href="{% url 'request_appointment' %}">Request Appointment</a>
+        <a href="#">Home</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <h1>Welcome to Mini Hospital</h1>
+    <p>Providing Compassionate Care for a Healthier Tomorrow</p>
+    <a href="{% url 'request_appointment' %}" class="btn">Book an Appointment</a>
+</section>
+
+<!-- About Us Section -->
+<section class="about">
+    <h2 class="section-title">About Us</h2>
+    <p>
+        Mini Hospital is dedicated to providing top-tier medical services and personal care to every patient.
+        Our team of skilled doctors and nurses ensure that every visit is as comfortable and effective as possible.
+    </p>
+</section>
+
+<!-- Services Section -->
+<section class="services">
+    <h2 class="section-title">Our Services</h2>
+    <div class="services-list">
+        <div class="service-card">
+            <h3>General Medicine</h3>
+            <p>Comprehensive care for common illnesses and regular check-ups.</p>
+        </div>
+        <div class="service-card">
+            <h3>Pediatrics</h3>
+            <p>Specialized care for infants, children, and adolescents.</p>
+        </div>
+        <div class="service-card">
+            <h3>Cardiology</h3>
+            <p>Heart care from screenings to advanced treatment.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <p>If you have any questions, feel free to <strong>call us</strong> or visit our front desk at any time.</p>
+    <p>Email: contact@minihospital.com | Phone: +250 788 123 456</p>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2025 MediHub Hospital. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
