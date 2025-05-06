@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard | VotingComm</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -73,11 +75,11 @@
         .candidate-card p {
             font-size: 16px;
             color: #555;
+            margin-bottom: 15px;
         }
 
         .btn-vote {
             display: inline-block;
-            margin-top: 15px;
             padding: 10px 20px;
             background: #3498db;
             color: white;
@@ -85,6 +87,8 @@
             text-decoration: none;
             font-weight: bold;
             transition: background 0.3s;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-vote:hover {
@@ -92,18 +96,20 @@
         }
 
         .btn-voted {
-            background: gray;
+            background: #95a5a6;
             color: white;
             padding: 10px 20px;
             border-radius: 30px;
             border: none;
             font-weight: bold;
-            margin-top: 15px;
             cursor: not-allowed;
         }
 
         .comment-section {
             margin-top: 50px;
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
         }
 
         .comment-form textarea {
@@ -115,16 +121,24 @@
             resize: none;
             height: 100px;
             margin-bottom: 15px;
+            transition: border 0.3s;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
         }
 
         .comment-form button {
             background: #3498db;
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
+            transition: background 0.3s;
         }
 
         .comment-form button:hover {
@@ -136,17 +150,30 @@
         }
 
         .comment-item {
-            background: #f0f0f0;
+            background: white;
             padding: 20px;
             border-radius: 15px;
             margin-bottom: 20px;
             position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 4px solid #3498db;
         }
 
         .comment-item strong {
             display: block;
             margin-bottom: 5px;
             color: #2c3e50;
+        }
+
+        .comment-item .comment-date {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-left: 10px;
+        }
+
+        .comment-item p {
+            margin-top: 10px;
+            line-height: 1.5;
         }
 
         .vote-buttons {
@@ -160,15 +187,68 @@
         .vote-buttons button {
             background: transparent;
             border: none;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
-            color: #3498db;
-            transition: transform 0.3s;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            padding: 5px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .vote-buttons button:hover {
-            transform: scale(1.2);
-            color: #2980b9;
+            background: #f1f1f1;
+            color: #3498db;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #3498db;
+        }
+        a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: bold;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .candidate-card {
+                width: 100%;
+            }
+            
+            .vote-buttons {
+                position: static;
+                margin-top: 15px;
+                justify-content: flex-end;
+            }
         }
     </style>
 </head>
@@ -176,66 +256,203 @@
 
 {% if messages %}
     {% for message in messages %}
-        <script>alert("{{ message }}");</script>
+        <div class="alert-message" style="position: fixed; top: 20px; right: 20px; background: {% if message.tags == 'success' %}#2ecc71{% else %}#e74c3c{% endif %}; color: white; padding: 15px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; animation: fadeIn 0.3s;">
+            {{ message }}
+            <button onclick="this.parentElement.remove()" style="background: transparent; border: none; color: white; margin-left: 10px; cursor: pointer;">×</button>
+        </div>
     {% endfor %}
 {% endif %}
 
 <div class="container">
-
     <h2>Welcome, {{ user.username }}</h2>
 
-    <!-- Candidates -->
-    <div class="candidates-list">
-        {% for candidate in candidates %}
-        <div class="candidate-card">
-            {% if candidate.image %}
-                <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}">
-            {% else %}
-                <div style="background: #eee; height: 200px; display: flex; align-items: center; justify-content: center;">No Image</div>
-            {% endif %}
-            <div class="candidate-card-content">
-                <h3>{{ candidate.name }}</h3>
-                <p>{{ candidate.description }}</p>
-                {% if not user_profile.voted %}
-                    <a href="{% url 'vote' candidate.id %}" class="btn-vote">Vote</a>
+    <!-- Candidates Section -->
+    <div class="candidates-section">
+        <h3 class="section-title"><i class="fas fa-users"></i> Candidates</h3>
+        
+        <div class="candidates-list">
+            {% for candidate in candidates %}
+            <div class="candidate-card">
+                {% if candidate.image %}
+                    <img src="{{ candidate.image.url }}" alt="{{ candidate.name }}">
                 {% else %}
-                    <button class="btn-voted" disabled>Voted</button>
+                    <div style="background: #eee; height: 200px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-tie" style="font-size: 50px; color: #95a5a6;"></i>
+                    </div>
                 {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <!-- Comment Section -->
-    <div class="comment-section">
-        <h3>Leave a Comment</h3>
-
-        <form method="POST" class="comment-form">
-            {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit">Submit Comment</button>
-        </form>
-
-        <h3 style="margin-top: 40px;">Election Comments:</h3>
-
-        <div class="comment-list">
-            {% for comment in comments %}
-            <div class="comment-item">
-                <strong>{{ comment.user.username }}</strong> ({{ comment.created_at|date:"M d, Y H:i" }})
-                <p>{{ comment.text }}</p>
-
-                <!-- Upvote/Downvote buttons -->
-                <div class="vote-buttons">
-                    <button title="Upvote">👍</button>
-                    <button title="Downvote">👎</button>
+                <div class="candidate-card-content">
+                    <h3>{{ candidate.name }}</h3>
+                    <p>{{ candidate.description|truncatewords:20 }}</p>
+                    {% if not user_profile.voted %}
+                        <a href="{% url 'vote' candidate.id %}" class="btn-vote">Vote Now</a>
+                    {% else %}
+                        <button class="btn-voted" disabled>Already Voted</button>
+                    {% endif %}
                 </div>
-
             </div>
             {% endfor %}
         </div>
     </div>
 
+    <!-- Comment Section -->
+    <div class="comment-section">
+        <h3 class="section-title"><i class="fas fa-comments"></i> Election Discussion</h3>
+        
+        <form method="POST" class="comment-form" id="commentForm">
+            {% csrf_token %}
+            <textarea name="text" placeholder="Share your thoughts about the election..." required></textarea>
+            <button type="submit" id="submitCommentBtn">
+                <i class="fas fa-paper-plane"></i> Post Comment
+            </button>
+        </form>
+
+        <div class="comment-list" id="commentList">
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="comment-item">
+                    <div>
+                        <strong>{{ comment.user.username }}</strong>
+                        <span class="comment-date">{{ comment.created_at|date:"M d, Y H:i" }}</span>
+                    </div>
+                    <p>{{ comment.text }}</p>
+                    
+                    <div class="vote-buttons">
+                        <button title="Upvote"><i class="fas fa-thumbs-up"></i></button>
+                        <button title="Downvote"><i class="fas fa-thumbs-down"></i></button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-comments">
+                    <i class="fas fa-comment-slash" style="font-size: 24px; margin-bottom: 10px;"></i>
+                    <p>No comments yet. Be the first to share your thoughts!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const commentForm = document.getElementById('commentForm');
+    const commentList = document.getElementById('commentList');
+    const submitBtn = document.getElementById('submitCommentBtn');
+    
+    // Remove alert messages after 5 seconds
+    const alerts = document.querySelectorAll('.alert-message');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.style.animation = 'fadeOut 0.3s';
+            setTimeout(() => alert.remove(), 300);
+        }, 5000);
+    });
+    
+    commentForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(commentForm);
+        const textarea = commentForm.querySelector('textarea');
+        const originalBtnText = submitBtn.innerHTML;
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+        submitBtn.disabled = true;
+        
+        try {
+            const response = await fetch("{% url 'submit_comment' %}", {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': "{{ csrf_token }}"
+                }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // Clear the form
+                textarea.value = '';
+                
+                // Create new comment element
+                const newComment = document.createElement('div');
+                newComment.className = 'comment-item';
+                newComment.innerHTML = `
+                    <div>
+                        <strong>${data.comment.username}</strong>
+                        <span class="comment-date">${data.comment.created_at}</span>
+                    </div>
+                    <p>${data.comment.text}</p>
+                    <div class="vote-buttons">
+                        <button title="Upvote"><i class="fas fa-thumbs-up"></i></button>
+                        <button title="Downvote"><i class="fas fa-thumbs-down"></i></button>
+                    </div>
+                `;
+                
+                // Remove "no comments" message if it exists
+                const noComments = commentList.querySelector('.no-comments');
+                if (noComments) noComments.remove();
+                
+                // Add new comment at the top
+                commentList.insertBefore(newComment, commentList.firstChild);
+                
+                // Show success message
+                showAlert('Comment posted successfully!', 'success');
+            } else {
+                showAlert(data.error || 'Error posting comment', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert('Network error. Please try again.', 'error');
+        } finally {
+            // Restore button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        }
+    });
+    
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert-message';
+        alertDiv.style.position = 'fixed';
+        alertDiv.style.top = '20px';
+        alertDiv.style.right = '20px';
+        alertDiv.style.background = type === 'success' ? '#2ecc71' : '#e74c3c';
+        alertDiv.style.color = 'white';
+        alertDiv.style.padding = '15px';
+        alertDiv.style.borderRadius = '5px';
+        alertDiv.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+        alertDiv.style.zIndex = '1000';
+        alertDiv.style.animation = 'fadeIn 0.3s';
+        alertDiv.innerHTML = `
+            ${message}
+            <button onclick="this.parentElement.remove()" style="background: transparent; border: none; color: white; margin-left: 10px; cursor: pointer;">×</button>
+        `;
+        
+        document.body.appendChild(alertDiv);
+        
+        setTimeout(() => {
+            alertDiv.style.animation = 'fadeOut 0.3s';
+            setTimeout(() => alertDiv.remove(), 300);
+        }, 5000);
+    }
+});
+
+// CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-20px); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+<a href="home.html">Back To Homepage</a>
 
 </body>
 </html>
